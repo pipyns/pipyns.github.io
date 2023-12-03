@@ -38,6 +38,6 @@ Our goal is to provide home-owners with a device that can detect and respond to 
 - User Application Interface to Enable Real-Time Monitoring and Control
 - Customizability to Users' Varying Needs
 
-If you would like to read our Design Blogs, you can either [click here](https://pipyns.github.io/blog_posts.html) or click Archive in the top corner!
+If you would like to read our Design Blogs, you can either [click here](https://pipyns.github.io/blogposts.html) or click Archive in the top corner!
 
 To reach the team, please send us an email at pipyns@gmail.com, and we will get back to you as soon as possible.
