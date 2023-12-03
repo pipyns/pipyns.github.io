@@ -23,7 +23,7 @@ header:
       fr-LU   : *FR
       tr      : &TR       Hakkında
       # @end locale config
-    url: /blogposts.html
+    url: /blog/index.html
   
   - titles:
       # @start locale config
