@@ -1,5 +1,5 @@
 header:
-- titles:
+  - titles:
       # @start locale config
       en      : &EN       Blog Posts
       en-GB   : *EN
