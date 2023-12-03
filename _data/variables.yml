@@ -4,9 +4,9 @@ default:
   lang: en
   paths:
     root: /
+    blogposts: /blogposts.html
     home: /about.html
     archive:  /archive.html
-    blogposts: /blogposts.html
     rss:  /feed.xml
   mathjax: false
   mathjax_autoNumber: false
