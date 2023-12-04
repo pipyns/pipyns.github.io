@@ -26,7 +26,15 @@ titles:
 key: page-about
 ---
 
-<img src="https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/UW_ENG.png" alt="University of Waterloo" width="600" height="350">
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+<img src="https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/UW_ENG.png" alt="University of Waterloo">
 
 Our team is comprised of Dmitrii Tcyrenov, Ellie Xu, Joyce Ke, and Jakeb Chouinard -- all 4th year Mechatronics Engineering students at the University of Waterloo in Waterloo, Ontario. Thanks to their diverse skillset and previous experiences across different industries, there is no part of this project that seems undoable. Dmitrii is largely mechanically-oriented, having extensive experience in mechanical design and rapid prototyping. Ellie has a variety of experience between electrical and back-end software development, though she will be primarily focused on Electrical system design andily  PCB development. Joyce's experience is largely split between front-end, back-end, and application software development; she will be focusing on the development of the stack necessary to execute this project successfully. Jakeb has experience evenly split between manufacturing and software development. Consequently, his skillset is more varied, and he will be flexibly assisting in each system's development with a focus on software, electronic, and mechanical integration.
 
