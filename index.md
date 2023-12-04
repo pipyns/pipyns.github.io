@@ -26,7 +26,8 @@ titles:
 key: page-about
 ---
 
-![Image of a Home Flooding on an Otherwise Nice Day](https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/flooding.png)
+
+<img src="https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/flooding.png" alt="AI-Generated Art of a Home Flooding on an Otherwise Nice Day" width="600" height="350">
 
 Welcome to our Capstone Project Website! We are **Pipyns**!
 
