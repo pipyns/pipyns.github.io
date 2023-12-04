@@ -26,6 +26,13 @@ titles:
 key: page-about
 ---
 
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
 
 <img src="https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/flooding.png" alt="AI-Generated Art of a Home Flooding on an Otherwise Nice Day" width="600" height="350">
 
