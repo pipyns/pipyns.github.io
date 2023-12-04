@@ -26,6 +26,8 @@ titles:
 key: page-about
 ---
 
+![Image of a Home Flooding on an Otherwise Nice Day](https://raw.githubusercontent.com/pipyns/pipyns.github.io/master/assets/flooding.png)
+
 Welcome to our Capstone Project Website! We are **Pipyns**!
 
 According to [Ruby Home Real-Estate](https://www.rubyhome.com/blog/water-damage-stats/), the average cost for a water damage claim is almost $12,000 USD, and nearly 2% of all homes (in the US) experience water damage. From a non-fiscal perspective, pipe bursts also cause a disasterous loss of sentimental items, as the water damage can contaminate or otherwise destroy them.
