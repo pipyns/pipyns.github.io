@@ -14,7 +14,7 @@
 //#define PIN_DEBUG1            (5)
 //#define PIN_DEBUG2            (A0)
 
-#define TDC1000_CLKIN_FREQ_HZ (2000000)
+#define TDC1000_CLKIN_FREQ_HZ (8000000)
 #define TDC1000_CLKIN_FREQ_DIV (TDC1000::TxFreqDivider::Div8)
 
 /**

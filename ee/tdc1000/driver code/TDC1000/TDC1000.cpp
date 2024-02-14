@@ -1,5 +1,6 @@
 #include "TDC1000.h"
 #include <SPI.h>
+#include <Arduino.h>
 
 #define TDC1000_SPI_CLK_MAX                               (int32_t(20000000))
 #define TDC1000_SPI_MODE                                  (SPI_MODE0)
