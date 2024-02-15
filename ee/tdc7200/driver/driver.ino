@@ -29,11 +29,12 @@
 static TDC7200 tof(PIN_TDC7200_ENABLE, PIN_TDC7200_SPI_CS, TDC7200_CLOCK_FREQ_HZ);
 
 
-#define NUM_STOPS (5)
+#define NUM_STOPS (1)
 
 void setup()
 {
     Serial.begin(115200);
+    delay(1000);
     Serial.println(F("-- Starting TDC7200 test --"));
     while (not tof.begin())
     {
@@ -41,7 +42,7 @@ void setup()
         delay(1000);
     }
 
-    pinMode(PIN_TDC7200_INT, INPUT_PULLUP);     // active low (open drain)
+    pinMode(PIN_TDC7200_INT, INPUT);     // active low (open drain)
 
     digitalWrite(PIN_TDC7200_START, LOW);
     pinMode(PIN_TDC7200_START, OUTPUT);
@@ -103,17 +104,17 @@ static void genPulse(const uint32_t usec, const uint8_t numStops)
 
 void loop()
 {
-    static uint16_t pulseUs = 100;
+    static uint16_t pulseUs = 200;
 
     Serial.print(F("delay=")); Serial.print(pulseUs);
 
     tof.startMeasurement();
-
-    //genPulse(pulseUs, NUM_STOPS);
+    genPulse(pulseUs, NUM_STOPS);
 
     // Wait for interrupt to indicate finished or overflow
     while (digitalRead(PIN_TDC7200_INT) == HIGH);
-
+    
+    
     for (uint8_t stop = 1; stop <= NUM_STOPS; ++stop)
     {
         uint64_t time;
