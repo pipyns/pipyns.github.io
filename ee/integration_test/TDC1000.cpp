@@ -147,14 +147,9 @@
 
 #define ARRAY_SIZE(x)   ((sizeof(x))/sizeof(x[0]))
 
-TDC1000::TDC1000(const uint8_t pinCs, const uint8_t pinReset)
-    :   m_pinCs(pinCs),
-        m_pinReset(pinReset)
-{
-}
+TDC1000::TDC1000(const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq) : m_pinCs(pinCs), m_pinReset(pinReset), m_oscFreq(oscFreq) {}
 
-bool TDC1000::begin()
-{
+bool TDC1000::begin() {
     // -- Configure SPI
     digitalWrite(m_pinCs, HIGH);
     pinMode(m_pinCs, OUTPUT);
@@ -174,7 +169,34 @@ bool TDC1000::begin()
         return false;
     }
 
-    return true;
+    // -- Set Config Parameters
+    int configCountdown = 10;
+    bool isConfigured = this->autoConfigure();
+    while (!isConfigured && configCountdown >= 0) {
+        isConfigured = this->autoConfigure();
+        --configCountdown;
+    }
+
+    // -- Final Decision on Setup Success
+    if (isConfigured) return true;
+    return false;
+}
+
+bool TDC1000::autoConfigure() {
+    bool ok = true;
+    ok &= this->setTriggerEdge(true);
+    ok &= this->setTx(TDC1000::TxFreqDivider::Div8, 30 /*pulses*/, 31 /*shift*/, false /*damping*/);
+    ok &= this->setRx(true /*multiEcho*/);
+    ok &= this->setRxSensitivity(TDC1000::RxDacEchoThreshold::m220mV, TDC1000::RxPgaGain::g9dB, TDC1000::RxLnaFbMode::capacitive);
+    ok &= this->setRepeat(TDC1000::TxRxCycles::x1, 1 /*expected pulses*/);
+    ok &= this->setTofMeasuementStandard(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x64,
+                                       TDC1000::TxEchoTimeoutPeriod::T0x1024, 30, true); 
+    ok &= this->setTofMeasuementShort(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x128,
+                                    TDC1000::TxBlankPeriod::T0x128, TDC1000::TxEchoTimeoutPeriod::T0x1024);
+    ok &= this->setMeasureTOF(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode0);
+    //ok &= usafe.setMeasureTOF(TDC1000::TxRxChannel::Swap, TDC1000::TofMode::Mode2);
+    this->dumpSettings(m_oscFreq);
+    return ok;
 }
 
 bool TDC1000::setTriggerEdge(const bool rising)

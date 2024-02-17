@@ -9,13 +9,18 @@ class TDC1000
          * @param[in] pinEnable   Mcu pin controlling TDC1000 enable input.
          * @param[in] pinCs       Mcu pin controlling TDC1000 SPI CSB input.
          */
-        TDC1000(const uint8_t pinCs, const uint8_t pinReset);
+        TDC1000(const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq);
 
         /**
          * Initialize TDC1000.
          */
         bool begin();
 
+        /**
+         * Configure TDC1000
+         */
+         bool autoConfigure();
+        
         /**
          * Set polarity of trigger input.
          * @param[in] rising  Set to true to configure for rising edges, false for falling edges.
@@ -153,7 +158,8 @@ class TDC1000
     private:
         uint8_t  m_pinCs;           //< Mcu pin controlling TDC7200 SPI CSB input.
         uint8_t  m_pinReset;        //< Mcu pin controlling TDC7200 Reset input.
-
+        uint32_t m_oscFreq;         //< External Oscillator Frequency in Hz
+        
         /** Read a single byte through spi.
          * @param[in] addr   Register address to read. 
          * @return Register value at requested address.
