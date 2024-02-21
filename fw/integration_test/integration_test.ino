@@ -1,7 +1,6 @@
 #include "TDC1000.h"
 #include "TDC7200.h"
 #include <FastLED.h>
-#include <SPI.h>
 
 // ----------------------------------------------------------------- //
 //                    External Oscillator Rate                       //
@@ -74,17 +73,18 @@ static void ui64toa(uint64_t v, char * buf, uint8_t base) {
 //                         EXECUTABLE CODE                           //
 // ----------------------------------------------------------------- //
 void setup() {
-  delay(1000);
-  // Instantiate Serial + Wait for Availability
-  Serial.begin(115200);
-  delay(1000);
-  while (!Serial.available()) { }
-  
   // Setup Power to OnBoard LED + Turn Off (Power-Saving)
   FastLED.addLeds<NEOPIXEL, NEO_DATA>(leds, NEO_SIZE);
   digitalWrite(NEO_POW, LOW);
   pinMode(NEO_POW, OUTPUT);
   FastLED.setBrightness(100);
+  flashOnBoard(CRGB::Purple, 1);
+  
+  delay(1000);
+  // Instantiate Serial + Wait for Availability
+  Serial.begin(115200);
+  delay(1000);
+  while (!Serial.available()) { }
 
   // Setup Time-of-Flight Interface
   int setupCountdown = 50;
@@ -101,7 +101,7 @@ void setup() {
 
   // Setup Measurement Parameters for ToF Interface
   Serial.println("Configuring TOF Measurement");
-  if (not tof.setupMeasurement(10, 2, NUM_STOPS, 2)) {
+  if (not tof.setupMeasurement(10, 2, NUM_STOPS, 1)) {
     flashOnBoard(CRGB::Blue, 3);
     Serial.println("UNABLE TO SETUP MEASUREMENTS FOR TOF IC");
     while(1) {}
@@ -127,11 +127,12 @@ void setup() {
 void loop() {
   tof.startMeasurement();
   Serial.println("Starting Measurement");
-  while (digitalRead(PIN_TDC7200_INT) == HIGH) {
+  uint8_t measurementTimeout = 10;
+  while (digitalRead(PIN_TDC7200_INT) == HIGH && measurementTimeout > 0) {
     Serial.println("Waiting...");
-    delayMicroseconds(100);
+    delay(100);
+    --measurementTimeout;
   }
-  Serial.println("WASASDASDAS");
   for (uint8_t stop_num = 1; stop_num <= NUM_STOPS; ++stop_num) {
     uint64_t timer;
     if (tof.readMeasurement(stop_num, timer)) {

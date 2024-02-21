@@ -280,9 +280,13 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
     if (not m_normLsb)
     {
         const uint32_t calibration1 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION1);
-        const uint32_t calibration2 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION2);
-        Serial.println(calibration1);
-        Serial.println(calibration2);
+        const uint32_t calibration2 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION2);  
+
+        if (calibration1 == 0 or calibration2 == 0) {
+          Serial.println("BOTCHED CALIBRATION");
+          return false; // Overflow or Failed Calculation
+        }
+        
         // calCount scaled by 2^shift
         const int64_t calCount = ( int64_t(calibration2-calibration1) << shift ) / int64_t(m_cal2Periods - 1);
 
