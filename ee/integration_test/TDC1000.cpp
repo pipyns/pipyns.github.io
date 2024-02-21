@@ -21,6 +21,7 @@
 #define TDC1000_REG_ADR_TIMEOUT                           (0x08u)
 #define TDC1000_REG_ADR_CLOCK_RATE                        (0x09u)
 
+
 #define TDC1000_REG_SHIFT_CONFIG_0_TX_FREQ_DIV            (5)
 #define TDC1000_REG_MASK_CONFIG_0_TX_FREQ_DIV             (0b111u)
 #define TDC7200_REG_VAL_CONFIG_0_TX_FREQ_DIV(num)         (1 << (num+1))
@@ -31,6 +32,7 @@
 #define TDC1000_REG_MASK_CONFIG_0_NUM_TX                  (0b11111u)
 #define TDC1000_REG_DEFAULTS_CONFIG0                      (0x45u)
 
+#define TDC1000_REG_CYCLED_CONFIG0                        (0x5Eu)
 
 #define TDC1000_REG_SHIFT_CONFIG_1_NUM_AVG                (3)
 #define TDC1000_REG_MASK_CONFIG_1_NUM_AVG                 (0b111u)
@@ -42,6 +44,7 @@
 #define TDC1000_REG_VAL_CONFIG_1_NUM_RX_MAX               (7)
 #define TDC1000_REG_DEFAULTS_CONFIG1                      (0x40u)
 
+#define TDC1000_REG_CYCLED_CONFIG1                        (0x41u)
 
 #define TDC1000_REG_SHIFT_CONFIG_2_VCOM_SEL               (7)
 #define TDC1000_REG_MASK_CONFIG_2_VCOM_SEL                (0b1u)
@@ -149,23 +152,22 @@
 
 TDC1000::TDC1000(const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq) : m_pinCs(pinCs), m_pinReset(pinReset), m_oscFreq(oscFreq) {}
 
-bool TDC1000::begin() {
-    // -- Configure SPI
-    digitalWrite(m_pinCs, HIGH);
-    pinMode(m_pinCs, OUTPUT);
-    SPI.begin();
-
-    // -- Reset TDC1000
+bool TDC1000::begin() { 
+    // -- Reset TDC1000 (DOES NOT CLEAR REGISTERS)
     pinMode(m_pinReset, OUTPUT);
     digitalWrite(m_pinReset, HIGH);
     delay(10);
     digitalWrite(m_pinReset, LOW);
     delay(10);
 
+    // -- Configure SPI
+    digitalWrite(m_pinCs, HIGH);
+    pinMode(m_pinCs, OUTPUT);
+    SPI.begin();
+
     // -- Comms sanity check
-    if (   (spiReadReg8(TDC1000_REG_ADR_CONFIG_0) != TDC1000_REG_DEFAULTS_CONFIG0)
-        or (spiReadReg8(TDC1000_REG_ADR_CONFIG_1) != TDC1000_REG_DEFAULTS_CONFIG1) )
-    {
+    if (   ((spiReadReg8(TDC1000_REG_ADR_CONFIG_0) != TDC1000_REG_DEFAULTS_CONFIG0) or (spiReadReg8(TDC1000_REG_ADR_CONFIG_1) != TDC1000_REG_DEFAULTS_CONFIG1))
+       and ((spiReadReg8(TDC1000_REG_ADR_CONFIG_0) != TDC1000_REG_CYCLED_CONFIG0) or (spiReadReg8(TDC1000_REG_ADR_CONFIG_1) != TDC1000_REG_CYCLED_CONFIG1))) {
         return false;
     }
 
@@ -178,7 +180,9 @@ bool TDC1000::begin() {
     }
 
     // -- Final Decision on Setup Success
-    if (isConfigured) return true;
+    if (isConfigured) {
+      return true;
+    }
     return false;
 }
 
@@ -195,7 +199,7 @@ bool TDC1000::autoConfigure() {
                                     TDC1000::TxBlankPeriod::T0x128, TDC1000::TxEchoTimeoutPeriod::T0x1024);
     ok &= this->setMeasureTOF(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode0);
     //ok &= usafe.setMeasureTOF(TDC1000::TxRxChannel::Swap, TDC1000::TofMode::Mode2);
-    this->dumpSettings(m_oscFreq);
+    //this->dumpSettings(m_oscFreq);
     return ok;
 }
 

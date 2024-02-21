@@ -21,7 +21,7 @@
 #define PIN_TDC7200_INT       (2)
 #define PIN_TDC7200_ENABLE    (4)
 #define PIN_TDC7200_STOP      (5)
-#define PIN_TDC7200_START     (6)
+#define PIN_TDC7200_START     (3)
 
 #define PIN_TDC7200_SPI_CS    (7)
 #define TDC7200_CLOCK_FREQ_HZ (8000000)
@@ -50,6 +50,9 @@ void setup()
     digitalWrite(PIN_TDC7200_STOP, LOW);
     pinMode(PIN_TDC7200_STOP, OUTPUT);
 
+    pinMode(6, OUTPUT);
+    digitalWrite(6, HIGH);
+   
     if (not tof.setupMeasurement( 10,         // cal2Periods
                                   1,          // avgCycles
                                   NUM_STOPS,  // numStops

@@ -97,15 +97,14 @@ TDC7200::TDC7200(const uint8_t pinEnable, const uint8_t pinCs, const uint32_t cl
 {
 }
 
-bool TDC7200::begin()
-{
+bool TDC7200::begin() {
     // -- Enable TDC7200 - Reset to default configuration
     digitalWrite(m_pinEnable, LOW);
     pinMode(m_pinEnable, OUTPUT);
-    // Disable for a short time
+    // -- Disable for a short time
     delay(TDC7200_ENABLE_LOW_MS);
 
-    // Enable and wait the maximum time after enabling LDO to assure VREG is stable.
+    // -- Enable and wait the maximum time after enabling LDO to assure VREG is stable.
     digitalWrite(m_pinEnable, HIGH);
     delay(TDC7200_ENABLE_T3_LDO_SET3_MS);
 
@@ -125,7 +124,6 @@ bool TDC7200::begin()
     spiWriteReg8(TDC7200_REG_ADR_INT_MASK,   bit(TDC7200_REG_SHIFT_INT_MASK_CLOCK_CNTR_OVF_MASK)
                                            | bit(TDC7200_REG_SHIFT_INT_MASK_COARSE_CNTR_OVF_MASK)
                                            | bit(TDC7200_REG_SHIFT_INT_MASK_NEW_MEAS_MASK) );
-
     return true;
 }
 
@@ -140,7 +138,7 @@ bool TDC7200::setupMeasurement(const uint8_t cal2Periods, const uint8_t avgCycle
     else if (cal2Periods == 40) config2 = TDC7200_REG_VAL_CONFIG2_CALIBRATION2_PERIODS_40 << TDC7200_REG_SHIFT_CONFIG2_CALIBRATION2_PERIODS;
     else return false;
     m_cal2Periods = cal2Periods;
-
+    
     // Config2 Avg Cycles
     uint8_t val = TDC7200_REG_VAL_CONFIG2_AVG_CYCLES_MIN_VAL;
     do {
@@ -283,7 +281,8 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
     {
         const uint32_t calibration1 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION1);
         const uint32_t calibration2 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION2);
-        
+        Serial.println(calibration1);
+        Serial.println(calibration2);
         // calCount scaled by 2^shift
         const int64_t calCount = ( int64_t(calibration2-calibration1) << shift ) / int64_t(m_cal2Periods - 1);
 
