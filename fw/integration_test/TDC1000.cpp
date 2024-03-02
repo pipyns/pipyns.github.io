@@ -150,7 +150,7 @@
 
 #define ARRAY_SIZE(x)   ((sizeof(x))/sizeof(x[0]))
 
-TDC1000::TDC1000(const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq) : m_pinCs(pinCs), m_pinReset(pinReset), m_oscFreq(oscFreq) {}
+TDC1000::TDC1000(const uint8_t pinEnable, const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq) : m_pinEnable(pinEnable), m_pinCs(pinCs), m_pinReset(pinReset), m_oscFreq(oscFreq) {}
 
 bool TDC1000::begin() { 
     // -- Reset TDC1000 (DOES NOT CLEAR REGISTERS)
@@ -160,6 +160,10 @@ bool TDC1000::begin() {
     digitalWrite(m_pinReset, LOW);
     delay(10);
 
+    pinMode(m_pinEnable, OUTPUT);
+    digitalWrite(m_pinEnable, HIGH);
+    delay(10);
+    
     // -- Configure SPI
     digitalWrite(m_pinCs, HIGH);
     pinMode(m_pinCs, OUTPUT);

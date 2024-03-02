@@ -114,9 +114,7 @@ bool TDC7200::begin() {
     SPI.begin();
 
     // -- Comms sanity check
-    if (   (spiReadReg8(TDC7200_REG_ADR_CONFIG2)  != TDC7200_REG_DEFAULTS_CONFIG2)
-        or (spiReadReg8(TDC7200_REG_ADR_INT_MASK) != TDC7200_REG_DEFAULTS_INT_MASK) )
-    {
+    if ( (spiReadReg8(TDC7200_REG_ADR_CONFIG2) != TDC7200_REG_DEFAULTS_CONFIG2) ) {
         return false;
     }
 
@@ -124,6 +122,11 @@ bool TDC7200::begin() {
     spiWriteReg8(TDC7200_REG_ADR_INT_MASK,   bit(TDC7200_REG_SHIFT_INT_MASK_CLOCK_CNTR_OVF_MASK)
                                            | bit(TDC7200_REG_SHIFT_INT_MASK_COARSE_CNTR_OVF_MASK)
                                            | bit(TDC7200_REG_SHIFT_INT_MASK_NEW_MEAS_MASK) );
+    // -- INT sanity check
+    if ( (spiReadReg8(TDC7200_REG_ADR_INT_MASK) != TDC7200_REG_DEFAULTS_INT_MASK) ) {
+        return false;
+    }
+    
     return true;
 }
 
@@ -283,7 +286,8 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
         const uint32_t calibration2 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION2);  
 
         if (calibration1 == 0 or calibration2 == 0) {
-          Serial.println("BOTCHED CALIBRATION");
+          Serial.print("BOTCHED CALIBRATION -- ");
+          Serial.print("C1: "); Serial.print(calibration1); Serial.print(", C2: "); Serial.print(calibration2); Serial.print("\n");
           return false; // Overflow or Failed Calculation
         }
         

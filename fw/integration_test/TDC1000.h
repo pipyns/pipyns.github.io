@@ -9,7 +9,7 @@ class TDC1000
          * @param[in] pinEnable   Mcu pin controlling TDC1000 enable input.
          * @param[in] pinCs       Mcu pin controlling TDC1000 SPI CSB input.
          */
-        TDC1000(const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq);
+        TDC1000(const uint8_t pinEnable, const uint8_t pinCs, const uint8_t pinReset, const uint32_t oscFreq);
 
         /**
          * Initialize TDC1000.
@@ -156,6 +156,7 @@ class TDC1000
         void dumpSettings(const uint32_t freqClkInHz = 0ul);
 
     private:
+        uint8_t  m_pinEnable;
         uint8_t  m_pinCs;           //< Mcu pin controlling TDC7200 SPI CSB input.
         uint8_t  m_pinReset;        //< Mcu pin controlling TDC7200 Reset input.
         uint32_t m_oscFreq;         //< External Oscillator Frequency in Hz

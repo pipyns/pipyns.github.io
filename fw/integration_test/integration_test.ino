@@ -10,18 +10,19 @@
 // ----------------------------------------------------------------- //
 //                   TDC1000 IC SETUP: US to ToF                     //
 // ----------------------------------------------------------------- //
-#define PIN_TDC1000_RESET     (5)
-#define PIN_TDC1000_SPI_CS    (6)
+#define PIN_TDC1000_RESET     (1)
+#define PIN_TDC1000_SPI_CS    (2)
+#define PIN_TDC1000_ENABLE    (6)
 
-static TDC1000 usafe(PIN_TDC1000_SPI_CS, PIN_TDC1000_RESET, OSC_FREQ_HZ);
+static TDC1000 usafe(PIN_TDC1000_ENABLE, PIN_TDC1000_SPI_CS, PIN_TDC1000_RESET, OSC_FREQ_HZ);
 
 // ----------------------------------------------------------------- //
 //                  TDC7200 IC SETUP: ToF to Digital                 //
 // ----------------------------------------------------------------- //
 #define NUM_STOPS             (1)
-#define PIN_TDC7200_INT       (2)
-#define PIN_TDC7200_ENABLE    (4)
-#define PIN_TDC7200_SPI_CS    (7)
+#define PIN_TDC7200_INT       (4)
+#define PIN_TDC7200_ENABLE    (5)
+#define PIN_TDC7200_SPI_CS    (3)
 
 static TDC7200 tof(PIN_TDC7200_ENABLE, PIN_TDC7200_SPI_CS, OSC_FREQ_HZ);
 
@@ -31,6 +32,7 @@ static TDC7200 tof(PIN_TDC7200_ENABLE, PIN_TDC7200_SPI_CS, OSC_FREQ_HZ);
 #define NEO_DATA              (18)
 #define NEO_POW               (17)
 #define NEO_SIZE              (1)
+
 static CRGB leds[NEO_SIZE];
 
 // ----------------------------------------------------------------- //
@@ -73,13 +75,17 @@ static void ui64toa(uint64_t v, char * buf, uint8_t base) {
 //                         EXECUTABLE CODE                           //
 // ----------------------------------------------------------------- //
 void setup() {
+  pinMode(0,OUTPUT);
+  digitalWrite(0,LOW);
+  pinMode(PIN_TDC7200_INT,INPUT);
+  pinMode(PIN_TDC1000_RESET,OUTPUT);
+  
   // Setup Power to OnBoard LED + Turn Off (Power-Saving)
   FastLED.addLeds<NEOPIXEL, NEO_DATA>(leds, NEO_SIZE);
   digitalWrite(NEO_POW, LOW);
   pinMode(NEO_POW, OUTPUT);
   FastLED.setBrightness(100);
   flashOnBoard(CRGB::Purple, 1);
-  
   delay(1000);
   // Instantiate Serial + Wait for Availability
   Serial.begin(115200);
@@ -94,7 +100,7 @@ void setup() {
     --setupCountdown;
   }
   if (setupCountdown < 0) {
-    flashOnBoard(CRGB::Green, 3);
+    flashOnBoard(CRGB::Red, 3);
     Serial.println("UNABLE TO SETUP TOF IC");
     while(1) {}
   }
@@ -116,11 +122,12 @@ void setup() {
   }
   
   if (setupCountdown < 0) {
-    flashOnBoard(CRGB::White, 3);
+    flashOnBoard(CRGB::Yellow, 3);
     Serial.println("UNABLE TO SETUP ULTRASONIC IC");
     while(1) {}
   }
-  
+
+  flashOnBoard(CRGB::Green, 5);
   Serial.println("Setup Successful");
 }
 
