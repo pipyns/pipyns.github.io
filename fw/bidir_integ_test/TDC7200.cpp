@@ -305,7 +305,7 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
         {
             const uint32_t timen        = spiReadReg24(TDC7200_REG_ADR_TIMEX(stop));          // TIME(n)
             tof = ( int64_t(timen) * m_normLsb ) >> shift;
-            Serial.println(""); Serial.println("M1 ToF");
+            // Serial.println(""); Serial.println("M1 ToF");
             break;
         }
         case 2:
@@ -315,7 +315,7 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
             const uint32_t clockCountn  = spiReadReg24(TDC7200_REG_ADR_CLOCK_COUNTX(stop));   // CLOCK_COUNT(n)
             tof = ( (int64_t(time1) - int64_t(timen1)) * m_normLsb ) >> shift;
             tof += uint64_t(clockCountn) * uint64_t(m_clkPeriodPs);
-            Serial.println(""); Serial.println("M2 ToF");
+            // Serial.println(""); Serial.println("M2 ToF");
             break;
         }
         default: return false;
