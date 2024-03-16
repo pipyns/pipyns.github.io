@@ -99,7 +99,7 @@ void setup() {
 
   bool setupStatus = true;
   setupStatus &= ultrasonicInterface.attachTDC1000(&usafe);
-  setupStatus &= ultrasonicInterface.attachTDC7200(&tof);
+  setupStatus &= ultrasonicInterface.attachTDC7200(&tof, 2);
 
   if (!setupStatus) {
     Serial.println("womp womp");
@@ -148,57 +148,36 @@ void setup() {
 }
 
 void loop() {
+  // Test single transducer
   bool measurementSuccess = false;
   uint64_t measurementValue = 0u;
-  
-  // Test single transducer
-  //measurementSuccess = ultrasonicInterface.getSingleChannelMeasurement(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode0, measurementValue); 
-  
-  // Test both transducers
-  //measurementSuccess = ultrasonicInterface.getSingleChannelMeasurement(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode1, measurementValue); 
+  measurementSuccess = ultrasonicInterface.getSingleChannelMeasurement(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode1, measurementValue); 
 
-//  if (measurementSuccess) {
-//    char buff[40];
-//    ui64toa(measurementValue, buff, 10);
-//    Serial.print(F("\tTime-of-Flight [ps]: ")); Serial.print(buff); Serial.print(F("\n"));
-//  }
-//  else {
-//    Serial.println("lol no");
-//  }
-
-  // Test bidirectional transducers
-  bool bidirectionalSuccess = false;
-  uint64_t tofUp = 0ll;
-  uint64_t tofDown = 0ll;
-  bidirectionalSuccess = ultrasonicInterface.bidirectionalSample(TDC1000::TofMode::Mode1, tofUp, tofDown); 
-  if (bidirectionalSuccess) {
-    char buff1[40];
-    char buff2[40];
-    ui64toa(tofUp, buff1, 10);
-    ui64toa(tofDown, buff2, 10);
-    Serial.print(F("\tTime-of-Flight UP   [ps]: ")); Serial.print(buff1); Serial.print(F("\n"));
-    Serial.print(F("\tTime-of-Flight DOWN [ps]: ")); Serial.print(buff2); Serial.print(F("\n"));
-    delay(500);
+  if (measurementSuccess) {
+    char buff[40];
+    ui64toa(measurementValue, buff, 10);
+    Serial.print(F("\tTime-of-Flight [ps]: ")); Serial.print(buff); Serial.print(F("\n"));
+    delay(1000);
   }
   else {
     Serial.println("lol no");
   }
-  /*
-  tof.startMeasurement();
-  Serial.println("Starting Measurement");
-  uint8_t measurementTimeout = 10;
-  while (digitalRead(PIN_TDC7200_INT) == HIGH && measurementTimeout > 0) {
-    Serial.println("Waiting...");
-    delay(100);
-    --measurementTimeout;
-  }
-  for (uint8_t stop_num = 1; stop_num <= NUM_STOPS; ++stop_num) {
-    uint64_t timer;
-    if (tof.readMeasurement(stop_num, timer)) {
-      char buff[40];
-      ui64toa(timer, buff, 10);
-      Serial.print(F("\tTime-of-Flight [ps]: ")); Serial.print(buff); Serial.print(F("\n"));
-    }
-  }
-  */
+
+//  // Test bidirectional transducers
+//  bool bidirectionalSuccess = false;
+//  uint64_t tofUp = 0ll;
+//  uint64_t tofDown = 0ll;
+//  bidirectionalSuccess = ultrasonicInterface.bidirectionalSample(TDC1000::TofMode::Mode1, tofUp, tofDown); 
+//  if (bidirectionalSuccess) {
+//    char buff1[40];
+//    char buff2[40];
+//    ui64toa(tofUp, buff1, 10);
+//    ui64toa(tofDown, buff2, 10);
+//    Serial.print(F("\tTime-of-Flight UP   [ps]: ")); Serial.print(buff1); Serial.print(F("\n"));
+//    Serial.print(F("\tTime-of-Flight DOWN [ps]: ")); Serial.print(buff2); Serial.print(F("\n"));
+//    delay(500);
+//  }
+//  else {
+//    Serial.println("lol no");
+//  }
 }
