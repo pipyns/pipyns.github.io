@@ -11,12 +11,12 @@ bool UltrasonicInterface::attachTDC1000(TDC1000 *usafe) {
   return true;
 }
 
-bool UltrasonicInterface::attachTDC7200(TDC7200 *tof) {
+bool UltrasonicInterface::attachTDC7200(TDC7200 *tof, const uint8_t tofMode) {
   m_tof = tof;
   if (!m_tof->begin()) {
     return false;
   }
-  if (!m_tof->setupMeasurement(10, 2, 1, 1)) {
+  if (!m_tof->setupMeasurement(10, 2, 1, tofMode)) {
       return false;
   }
   return true;
