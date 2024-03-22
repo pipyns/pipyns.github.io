@@ -108,36 +108,36 @@ void setup() {
 }
 
 void loop() {
-  // Test single transducer
-  bool measurementSuccess = false;
-  uint64_t measurementValue = 0u;
-  measurementSuccess = ultrasonicInterface.getSingleChannelMeasurement(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode1, measurementValue); 
-
-  if (measurementSuccess) {
-    char buff[40];
-    ui64toa(measurementValue, buff, 10);
-    Serial.print(F("\tTime-of-Flight [ps]: ")); Serial.print(buff); Serial.print(F("\n"));
-    delay(1000);
-  }
-  else {
-    Serial.println("lol no");
-  }
-
-//  // Test bidirectional transducers
-//  bool bidirectionalSuccess = false;
-//  uint64_t tofUp = 0ll;
-//  uint64_t tofDown = 0ll;
-//  bidirectionalSuccess = ultrasonicInterface.bidirectionalSample(TDC1000::TofMode::Mode1, tofUp, tofDown); 
-//  if (bidirectionalSuccess) {
-//    char buff1[40];
-//    char buff2[40];
-//    ui64toa(tofUp, buff1, 10);
-//    ui64toa(tofDown, buff2, 10);
-//    Serial.print(F("\tTime-of-Flight UP   [ps]: ")); Serial.print(buff1); Serial.print(F("\n"));
-//    Serial.print(F("\tTime-of-Flight DOWN [ps]: ")); Serial.print(buff2); Serial.print(F("\n"));
-//    delay(500);
+//  // Test single transducer
+//  bool measurementSuccess = false;
+//  uint64_t measurementValue = 0u;
+//  measurementSuccess = ultrasonicInterface.getSingleChannelMeasurement(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode1, measurementValue); 
+//
+//  if (measurementSuccess) {
+//    char buff[40];
+//    ui64toa(measurementValue, buff, 10);
+//    Serial.print(F("\tTime-of-Flight [ps]: ")); Serial.print(buff); Serial.print(F("\n"));
+//    delay(1000);
 //  }
 //  else {
 //    Serial.println("lol no");
 //  }
+
+  // Test bidirectional transducers
+  bool bidirectionalSuccess = false;
+  uint64_t tofUp = 0ll;
+  uint64_t tofDown = 0ll;
+  bidirectionalSuccess = ultrasonicInterface.bidirectionalSample(TDC1000::TofMode::Mode1, tofUp, tofDown); 
+  if (bidirectionalSuccess) {
+    char buff1[40];
+    char buff2[40];
+    ui64toa(tofUp, buff1, 10);
+    ui64toa(tofDown, buff2, 10);
+    Serial.print(F("\tTime-of-Flight UP   [ps]: ")); Serial.print(buff1); Serial.print(F("\n"));
+    Serial.print(F("\tTime-of-Flight DOWN [ps]: ")); Serial.print(buff2); Serial.print(F("\n"));
+  }
+  else {
+    Serial.println("lol no");
+  }
+  delay(500);
 }
