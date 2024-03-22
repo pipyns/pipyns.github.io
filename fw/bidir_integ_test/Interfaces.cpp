@@ -41,6 +41,7 @@ bool UltrasonicInterface::getSingleChannelMeasurement(const TDC1000::TxRxChannel
             this->timer.stop();
             return true;
         }
+        delay(50);
     }
     this->timer.stop();
     return false;
