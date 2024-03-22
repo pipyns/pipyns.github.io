@@ -99,52 +99,12 @@ void setup() {
 
   bool setupStatus = true;
   setupStatus &= ultrasonicInterface.attachTDC1000(&usafe);
-  setupStatus &= ultrasonicInterface.attachTDC7200(&tof, 2);
+  setupStatus &= ultrasonicInterface.attachTDC7200(&tof, 1);
 
   if (!setupStatus) {
-    Serial.println("womp womp");
+    Serial.println("Failed Initialization");
     while(1) {};
   }
-  
-  /*
-  // Setup Time-of-Flight Interface
-  int setupCountdown = 50;
-  Serial.println("Setting Up ToF IC");
-  while (!tof.begin() && setupCountdown >= 0) {
-    delay(50);
-    --setupCountdown;
-  }
-  if (setupCountdown < 0) {
-    flashOnBoard(CRGB::Red, 3);
-    Serial.println("UNABLE TO SETUP TOF IC");
-    while(1) {}
-  }
-
-  // Setup Measurement Parameters for ToF Interface
-  Serial.println("Configuring TOF Measurement");
-  if (not tof.setupMeasurement(10, 2, NUM_STOPS, 1)) {
-    flashOnBoard(CRGB::Blue, 3);
-    Serial.println("UNABLE TO SETUP MEASUREMENTS FOR TOF IC");
-    while(1) {}
-  }
-
-  // Setup Ultrasonic Interface
-  setupCountdown = 50;
-  Serial.println("Setting Up Ultrasonic IC");
-  while (!usafe.begin() && setupCountdown >= 0) {
-    delay(50);
-    --setupCountdown;
-  }
-  
-  if (setupCountdown < 0) {
-    flashOnBoard(CRGB::Yellow, 3);
-    Serial.println("UNABLE TO SETUP ULTRASONIC IC");
-    while(1) {}
-  }
-
-  flashOnBoard(CRGB::Green, 5);
-  Serial.println("Setup Successful");
-  */
 }
 
 void loop() {

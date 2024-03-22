@@ -286,8 +286,7 @@ bool TDC7200::readMeasurement(const uint8_t stop, uint64_t& tof)
         const uint32_t calibration2 = spiReadReg24(TDC7200_REG_ADR_CALIBRATION2);  
 
         if (calibration1 == 0 or calibration2 == 0) {
-          Serial.print("BOTCHED CALIBRATION -- ");
-          Serial.print("C1: "); Serial.print(calibration1); Serial.print(", C2: "); Serial.print(calibration2); Serial.print("\n");
+          Serial.println("Failed Measurement");
           return false; // Overflow or Failed Calculation
         }
         

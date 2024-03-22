@@ -34,14 +34,9 @@ bool UltrasonicInterface::getSingleChannelMeasurement(const TDC1000::TxRxChannel
     
     // While no reading is found
     while (tofReading == 0ull) {
-        Serial.println(timer.read());
         if (this->timer.read() > 2500) break;
         m_tof->startMeasurement();
-        while (digitalRead(m_interruptPin) == HIGH) {
-            // TDC7200 has built-in timeout for operation
-            // Serial.println("Waiting...");
-            delay(10);
-        }
+        while (digitalRead(m_interruptPin) == HIGH) { }
         if (m_tof->readMeasurement(1, tofReading)) {
             this->timer.stop();
             return true;
