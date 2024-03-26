@@ -195,7 +195,7 @@ bool TDC1000::autoConfigure() {
     ok &= this->setTriggerEdge(true);
     ok &= this->setTx(TDC1000::TxFreqDivider::Div8, 8 /*pulses*/, 31 /*shift*/, true /*damping*/);
     ok &= this->setRx(false /*singleEcho*/);
-    ok &= this->setRxSensitivity(TDC1000::RxDacEchoThreshold::m220mV, TDC1000::RxPgaGain::g9dB, TDC1000::RxLnaFbMode::capacitive);
+    ok &= this->setRxSensitivity(TDC1000::RxDacEchoThreshold::m125mV, TDC1000::RxPgaGain::g9dB, TDC1000::RxLnaFbMode::capacitive);
     ok &= this->setRepeat(TDC1000::TxRxCycles::x1, 1 /*expected pulses*/);
     ok &= this->setTofMeasuementStandard(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x64,
                                        TDC1000::TxEchoTimeoutPeriod::T0x1024, 30, true); 
